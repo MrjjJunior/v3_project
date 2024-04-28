@@ -1,18 +1,23 @@
 #!/usr/bin/python3
-'''
-creates Flasks web application
-'''
-from os import getenv
+''' '''
 from flask import Flask
-from models import storage
 from api.v1.views import app_views
+from models import storage
 
+# Create Flask app
 app = Flask(__name__)
 
-app.register_blueprint(app_views)
+# Register blueprint
+app.register_blueprint(app_views, url_prefix='/api/v1')
 
-if __name__ == '__main__':
-    HOST = getenv('HBNB_API_PORT', '0.0.0.0')
-    PORT = int(getenv('HBNB_API_PORT', 5000)
-            app.run(hosts=HOST, port=PORT, thread=True)
+# Teardown app context
+@app.teardown_appcontext
+def teardown(exception):
+    storage.close()
+
+# Run Flask server
+if __name__ == "__main__":
+    host = os.getenv('HBNB_API_HOST', '0.0.0.0')
+    port = int(os.getenv('HBNB_API_PORT', 5000))
+    app.run(host=host, port=port, threaded=True)
 
