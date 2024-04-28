@@ -79,24 +79,32 @@ class DBStorage:
         '''
         Returns the object based on the class and its ID, or None if not found.
         '''
-        if cls and id:
-            if cls in classes.values() and isinstance(id, str):
-                all_objects = self.all(cls)
-                for key, value in all_objects.items():
-                    if key.split(',')[1] == id:
-                        return value
+        return self.__session.query(cls).filter_by(id=id).firt()
+#        if cls and id:
+ #           if cls in classes.values() and isinstance(id, str):
+  #              all_objects = self.all(cls)
+   #             for key, value in all_objects.items():
+    #                if key.split(',')[1] == id:
+     #                   return value
 
     def count(self, cls, id):
         '''
         Returns the number of objects in storage matching the given class.
         '''
-        if not cls:
-            inst_of_all_cls = self.all()
-            return len(inst_of_all_cls)
-
-        if cls in classes.values():
-            all_inst_of_prov_cls = self.all()
-            return len(all_inst_of_prov_cls)
-
-        if cls not in classes.values():
-            return
+        if cls:
+            return self.__session.query(cls).count()
+        else:
+            count = 0
+            for cls in selff.__classes.values():
+                count += self.__session.query(cls).count()
+            return count
+#        if not cls:
+ #           inst_of_all_cls = self.all()
+  #          return len(inst_of_all_cls)
+#
+ #       if cls in classes.values():
+  #          all_inst_of_prov_cls = self.all()
+   #         return len(all_inst_of_prov_cls)
+#
+ #       if cls not in classes.values():
+  #          return
