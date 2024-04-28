@@ -15,6 +15,10 @@ app.register_blueprint(app_views, url_prefix='/api/v1')
 def teardown(exception):
     storage.close()
 
+# 404
+def page_not_found(error):
+    return jsonify({"error": "Not found"}), 404
+
 # Run Flask server
 if __name__ == "__main__":
     host = os.getenv('HBNB_API_HOST', '0.0.0.0')
