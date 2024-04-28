@@ -75,27 +75,35 @@ class FileStorage:
         '''
         Returns the object based on the class and its ID, or None if not found
         '''
-        if cls and id:
-            if cls in classes.values():
-                all_objects = self.all(cls)
+        def get(self, cls, id):
+            ''' gets one object. '''
+            return self.__object.get("{}.{}".format(cls.__name__, id))
 
-                for value in all_objects.values():
-                    if value.id == id:
-                        return value
-            return
-        return
+#        if cls and id:
+ #           if cls in classes.values():
+  #              all_objects = self.all(cls)
+#
+ #               for value in all_objects.values():
+  #                  if value.id == id:
+   #                     return value
+    #        return
+     #   return
 
     def count(self, cls, id):
         '''
         Returns the number of objects in storage matching the given class.
         '''
-        if not cls:
-            inst_of_all_cls = self.all()
-            return len(inst_of_all_cls)
-
-        if cls in classes.values():
-            all_inst_of_prov_cls = self.all()
-            return len(all_inst_of_prov_cls)
-
-        if cls not in classes.values():
-            return
+        if cls:
+            return sum(1 for obj_id in self.__objects.keys() if cls.__name__ in obj_id)
+        else:
+            return len(self.__objects)
+#        if not cls:
+ #           inst_of_all_cls = self.all()
+  #          return len(inst_of_all_cls)
+#
+ #       if cls in classes.values():
+  #          all_inst_of_prov_cls = self.all()
+   #         return len(all_inst_of_prov_cls)
+#
+ #       if cls not in classes.values():
+  #          return
